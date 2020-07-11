@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ContaCorrente.Repositorio.Interfaces;
+using ContaCorrente.Repositorio.Model;
+using ContaCorrente.Repositorio.Repositorios;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,13 +19,17 @@ namespace ContaCorrente
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureDataBase(services);
+
+            ConfigureRepositorios(services);
+
+            ConfigureDominios(services);
+
             services.AddControllersWithViews();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -49,5 +53,27 @@ namespace ContaCorrente
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
+        private void ConfigureDataBase(IServiceCollection services)
+        {
+            services.AddDbContext<CCDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("CCDatabase")));
+
+            services.AddScoped<CCDbContext>();
+        }
+
+        private void ConfigureRepositorios(IServiceCollection services)
+        {
+            services.AddScoped<ITipoTransacaoRepositorio, TipoTransacaoRepositorio>();
+            services.AddScoped<IPessoaRepositorio, PessoaRepositorio>();
+            services.AddScoped<IContaRepositorio, ContaRepositorio>();
+            services.AddScoped<ITransacaoRepositorio, TransacaoRepositorio>();
+            services.AddScoped<IRendimentoDiarioCCRepositorio, RendimentoDiarioCCRepositorio>();
+        }
+
+        private void ConfigureDominios(IServiceCollection services)
+        {
+            
+        }
+
     }
 }
