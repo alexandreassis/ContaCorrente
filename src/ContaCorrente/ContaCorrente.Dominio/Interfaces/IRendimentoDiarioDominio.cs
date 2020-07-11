@@ -2,5 +2,6 @@
 {
     public interface IRendimentoDiarioDominio
     {
+        public void LancarRendimentoDiarioCC(int idConta);
     }
 }

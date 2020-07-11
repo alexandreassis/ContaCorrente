@@ -13,10 +13,12 @@ namespace ContaCorrente.MVC.Controllers
     {
         private readonly IContaDominio _contaDominio;
         private readonly ITransacaoDominio _transacaoDominio;
-        public ContaController(IContaDominio contaDominio, ITransacaoDominio transacaoDominio)
+        private readonly IRendimentoDiarioDominio _rendimentoDiarioDominio;
+        public ContaController(IContaDominio contaDominio, ITransacaoDominio transacaoDominio, IRendimentoDiarioDominio rendimentoDiarioDominio)
         {
             _contaDominio = contaDominio;
             _transacaoDominio = transacaoDominio;
+            _rendimentoDiarioDominio = rendimentoDiarioDominio;
         }
 
         [HttpGet]
@@ -73,6 +75,25 @@ namespace ContaCorrente.MVC.Controllers
                 };
 
                 _transacaoDominio.Inserir(transacao);
+
+                return Ok(MensagemResposta.TransacaoInseridaSucesso);
+            }
+            catch (ArgumentException argumentEx)
+            {
+                return BadRequest(argumentEx.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("Conta/LancarRendimentoDiarioCC")]
+        public IActionResult LancarRendimentoDiarioCC(int? idConta)
+        {
+            if (idConta == null)
+                return NotFound();
+
+            try
+            {
+                _rendimentoDiarioDominio.LancarRendimentoDiarioCC(idConta.Value);
 
                 return Ok(MensagemResposta.TransacaoInseridaSucesso);
             }

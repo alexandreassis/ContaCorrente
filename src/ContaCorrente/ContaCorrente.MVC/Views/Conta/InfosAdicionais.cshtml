@@ -6,10 +6,13 @@
 
 <div>
     <a asp-action="Index" id="btnVoltar">Voltar</a>
+
+    <input type="submit" value="Inserir Rendimento Diário" onclick="LancarRendimentoDiarioCC()" class="btn btn-primary" id="btnInserirRendimentoCC" style="float:right" />
 </div>
 
 <h1>Informações da Conta</h1>
 <hr />
+<input type="hidden" asp-for="IdConta" id="IdConta" />
 <div>
     <dl class="row">
         <dt class="col-sm-2">
@@ -88,3 +91,23 @@
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script type="text/javascript">
+        function LancarRendimentoDiarioCC() {
+            $.ajax({
+                url: '/Conta/LancarRendimentoDiarioCC?idConta=' + $('#IdConta').val(),
+                type: 'post',
+                success: function (data) {
+                    alert(data);
+
+                    location.reload();
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                },
+                cache: false
+            });
+        }
+    </script>
+}

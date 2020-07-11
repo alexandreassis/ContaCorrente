@@ -10,6 +10,7 @@ namespace ContaCorrente.Dominio.Interfaces
         public TipoTransacao BuscarTipoTransacoesPorNome(string nome);
         public void Inserir(TransacaoDTO transacao);
         public void ValidarTipoTransacao(TipoTransacao tipoTransacao);
+        public void ValidarSaldo(Conta conta, TransacaoDTO transacaoParam, TipoTransacao tipoTransacao);
         public Conta AdicionarTransacao(Conta conta, TransacaoDTO transacaoParam, TipoTransacao tipoTransacao);
     }
 }

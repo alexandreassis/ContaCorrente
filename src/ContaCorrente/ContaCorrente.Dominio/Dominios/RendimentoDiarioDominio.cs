@@ -12,11 +12,13 @@ namespace ContaCorrente.Dominio.Dominios
         private readonly IContaDominio _contaDominio;
         private readonly ITransacaoDominio _transacaoDominio;
         private readonly IRendimentoDiarioCCRepositorio _rendimentoDiarioCCRepositorio;
-        public RendimentoDiarioDominio(IContaDominio contaDominio, ITransacaoDominio transacaoDominio, IRendimentoDiarioCCRepositorio rendimentoDiarioCCRepositorio)
+        private readonly ITransacaoRepositorio _transacaoRepositorio;
+        public RendimentoDiarioDominio(IContaDominio contaDominio, ITransacaoDominio transacaoDominio, IRendimentoDiarioCCRepositorio rendimentoDiarioCCRepositorio, ITransacaoRepositorio transacaoRepositorio)
         {
             _contaDominio = contaDominio;
             _transacaoDominio = transacaoDominio;
             _rendimentoDiarioCCRepositorio = rendimentoDiarioCCRepositorio;
+            _transacaoRepositorio = transacaoRepositorio;
         }
 
         public void LancarRendimentoDiarioCC(int idConta)
@@ -24,6 +26,9 @@ namespace ContaCorrente.Dominio.Dominios
             //Buscar dados a conta
             var conta = _contaDominio.BuscarPorId(idConta);
             _contaDominio.ValidarConta(conta);
+
+            if(conta.SaldoAtual <= 0)
+                throw new ArgumentException(MensagemResposta.ContaSemSaldoParaOperacao);
 
             //Buscar dados da transacao
             var tipoTransacao = _transacaoDominio.BuscarTipoTransacoesPorNome(TiposTransacoes.RentabilizarCC);
@@ -35,8 +40,16 @@ namespace ContaCorrente.Dominio.Dominios
             //Relizar o calculo com os dados retornados. 
             var transacao = CalcularRendimento(conta.IdConta, conta.SaldoAtual, tipoTransacao.IdTipoTransacao, proximoRendimento);
 
-            //Inserir a transacao
-            _transacaoDominio.Inserir(transacao);
+            conta = _transacaoDominio.AdicionarTransacao(conta, transacao, tipoTransacao);
+            conta.RendimentoDiarioCc.Add(new RendimentoDiarioCc
+            {
+                IdConta = transacao.IdConta,
+                IdTaxaCdi = proximoRendimento.IdTaxaCdi,
+                Rendimento = transacao.Valor,
+                SaldoAtual = conta.SaldoAtual
+            });
+
+            _transacaoRepositorio.InserirTransacao(conta);
         }
 
         public TaxaCdi ProximoRendimento(int idConta)
@@ -63,6 +76,10 @@ namespace ContaCorrente.Dominio.Dominios
                 Historico = proximoRendimento.Data.ToString("dd/MM/yyyy"),
                 DataHora = DateTime.Now,
             };
+
+            decimal rendimento = saldoAtual * (proximoRendimento.Percentual * proximoRendimento.TaxaDia);
+
+            transacao.Valor = rendimento;
 
             return transacao;
         }
