@@ -11,4 +11,9 @@
     <Folder Include="Mapper\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ContaCorrente.Commum\ContaCorrente.Commum.csproj" />
+    <ProjectReference Include="..\ContaCorrente.Repositorio\ContaCorrente.Repositorio.csproj" />
+  </ItemGroup>
+
 </Project>

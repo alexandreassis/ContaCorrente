@@ -1,3 +1,5 @@
+using ContaCorrente.Dominio.Dominios;
+using ContaCorrente.Dominio.Interfaces;
 using ContaCorrente.Repositorio.Interfaces;
 using ContaCorrente.Repositorio.Model;
 using ContaCorrente.Repositorio.Repositorios;
@@ -53,6 +55,7 @@ namespace ContaCorrente
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
+        
         private void ConfigureDataBase(IServiceCollection services)
         {
             services.AddDbContext<CCDbContext>(options =>
@@ -72,7 +75,10 @@ namespace ContaCorrente
 
         private void ConfigureDominios(IServiceCollection services)
         {
-            
+            services.AddScoped<IPessoaDominio, PessoaDominio>();
+            services.AddScoped<IContaDominio, ContaDominio>();
+            services.AddScoped<ITransacaoDominio, TransacaoDominio>();
+            services.AddScoped<IRendimentoDiarioDominio, RendimentoDiarioDominio>();
         }
 
     }

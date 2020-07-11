@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ContaCorrente.Dominio\ContaCorrente.Dominio.csproj" />
     <ProjectReference Include="..\ContaCorrente.Repositorio\ContaCorrente.Repositorio.csproj" />
   </ItemGroup>
 
