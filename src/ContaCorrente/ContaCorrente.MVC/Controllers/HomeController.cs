@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ContaCorrente.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ContaCorrente.Models;
+using System.Diagnostics;
 
-namespace ContaCorrente.Controllers
+namespace ContaCorrente.MVC.Controllers
 {
     public class HomeController : Controller
     {

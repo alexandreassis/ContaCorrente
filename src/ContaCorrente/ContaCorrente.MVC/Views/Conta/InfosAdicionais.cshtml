@@ -1,0 +1,90 @@
+﻿@model ContaCorrente.Dominio.DTO.ContaDTO
+
+@{
+    ViewData["Title"] = "Detalhe Conta";
+}
+
+<div>
+    <a asp-action="Index" id="btnVoltar">Voltar</a>
+</div>
+
+<h1>Informações da Conta</h1>
+<hr />
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            Id da Conta
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.IdConta)
+        </dd>
+        <dt class="col-sm-2">
+            Id da Pessoa
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.IdPessoa)
+        </dd>
+        <dt class="col-sm-2">
+            Nome
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.Pessoa.Nome)
+        </dd>
+        <dt class="col-sm-2">
+            CPF
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.Pessoa.CPF)
+        </dd>
+        <dt class="col-sm-2">
+            Saldo Atual
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.SaldoAtual)
+        </dd>
+    </dl>
+</div>
+
+<br />
+<h4>Transações</h4>
+<div>
+    <a asp-action="InserirTransacao" asp-route-id="@Model.IdConta" id="btnInserirTransacao">Inserir Transação</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Id da Transacao
+            </th>
+            <th>
+                Descricao
+            </th>
+            <th>
+                Valor
+            </th>
+            <th>
+                Data e Hora
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Transacoes.OrderByDescending(x => x.DataHora))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdTransacao)
+                </td>
+                <td>
+                    @(item.TipoTransacao.DescricaoAbreviada + (string.IsNullOrEmpty(item.Historico) ? "" : " - " + item.Historico))
+                </td>
+                <td style="@((item.TipoTransacao.FlagSaldoAtual == -1) ? "color: red;" : "")">
+                    @((item.TipoTransacao.FlagSaldoAtual == -1 ? "-" : "") + item.Valor.ToString("C"))
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataHora)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

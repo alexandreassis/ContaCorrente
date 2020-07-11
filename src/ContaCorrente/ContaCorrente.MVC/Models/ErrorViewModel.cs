@@ -1,6 +1,6 @@
 using System;
 
-namespace ContaCorrente.Models
+namespace ContaCorrente.MVC.Models
 {
     public class ErrorViewModel
     {

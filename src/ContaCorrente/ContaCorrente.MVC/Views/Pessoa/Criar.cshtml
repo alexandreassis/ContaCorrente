@@ -1,0 +1,57 @@
+﻿@model ContaCorrente.Dominio.DTO.PessoaDTO
+
+@{
+    ViewData["Title"] = "Criar";
+}
+
+<h1>Criar</h1>
+<h4>Pessoa</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="CPF" class="control-label"></label>
+            <input asp-for="CPF" class="form-control" id="pfCPF" />
+            <span asp-validation-for="CPF" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Nome" class="control-label"></label>
+            <input asp-for="Nome" class="form-control" id="pfNome" />
+            <span asp-validation-for="Nome" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            @*<input type="submit" value="Criar" class="btn btn-primary" />*@
+            <input type="submit" onclick="CriarPessoa()" class="btn btn-primary" />
+            <a asp-action="Index" id="btnVoltar">Voltar</a>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        function CriarPessoa() {
+            var pessoa = {
+                cpf: $('#pfCPF').val(),
+                nome: $('#pfNome').val()
+            };
+
+            $.ajax({
+                url: '/Pessoa/Criar?cpf=' + pessoa.cpf + '&nome=' + pessoa.nome,
+                type: 'post',
+                success: function (data) {
+                    alert(data);
+
+                    document.getElementById("btnVoltar").click();
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                },
+                cache: false
+            });
+        }
+    </script>
+}

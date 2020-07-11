@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ContaCorrente.Dominio.DTO.ContaDTO>
+
+@{
+ViewData["Title"] = "Contas";
+}
+
+<h1>Manutenção de Contas</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IdPessoa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdConta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaldoAtual)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdPessoa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdConta)
+            </td>
+            <td>
+                @item.SaldoAtual.ToString("C")
+            </td>
+            <td>
+                <a asp-action="InfosAdicionais" asp-route-id="@item.IdConta">Detalhar</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

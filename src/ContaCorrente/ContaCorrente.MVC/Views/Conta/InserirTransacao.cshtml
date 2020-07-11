@@ -1,0 +1,77 @@
+﻿@model InserirTransacaoViewModel
+@{
+    ViewData["Title"] = "InserirTransacao";
+}
+
+<h1>Inserir Transacao</h1>
+<h4>Conta</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="IdConta" id="IdConta" />
+        <div class="form-group">
+            <label class="control-label">Tipo de Transação</label>
+            <br />
+            <select asp-for="IdTipoTransacao" asp-items="Model.TiposTransacoes.OrderBy(x=> x.Text)" id="tIdTipoTransacao">
+                <option value="0">Selecione uma opção</option>
+            </select>
+            <span asp-validation-for="IdTipoTransacao" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Valor" class="control-label"></label>
+            <input asp-for="Valor" class="form-control" id="tValor"  asp-is-invariant="true"/>
+            <span asp-validation-for="Valor" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Salvar" onclick="InserirTransacao()" class="btn btn-primary" />
+            <a asp-action="InfosAdicionais" asp-route-id="@Model.IdConta" id="btnVoltar">Voltar</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        function InserirTransacao() {
+            var transacao = {
+                idConta: $('#IdConta').val(),
+                valor: $('#tValor').val().replace(',', '.'),
+                idTipoTransacao: $('#tIdTipoTransacao').val()
+            };
+
+            if (transacao.idTipoTransacao <= 0) {
+                alert('Selecione uma transação válida.');
+                return;
+            }
+
+            if (ValorValido(transacao.valor) === false) {
+                alert('Insira um valor válido.');
+                return;
+            }
+
+            $.ajax({
+                url: '/Conta/InserirTransacao?idConta=' + transacao.idConta + '&valor=' + transacao.valor + '&idTipoTransacao=' + transacao.idTipoTransacao,
+                type: 'post',
+                success: function (data) {
+                    alert(data);
+
+                    document.getElementById("btnVoltar").click();
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                },
+                cache: false
+            });
+        }
+
+        function ValorValido(num) {
+            var regex  = /^\d+(?:\.\d{0,2})$/;
+
+            return regex.test(num) && num > 0;
+        }
+    </script>
+}
+
+
