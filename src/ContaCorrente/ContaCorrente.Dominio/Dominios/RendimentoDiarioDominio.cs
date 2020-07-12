@@ -21,6 +21,10 @@ namespace ContaCorrente.Dominio.Dominios
             _transacaoRepositorio = transacaoRepositorio;
         }
 
+        /// <summary>
+        /// Realiza o lancamento do rendimento diario da conta corrente para a conta
+        /// </summary>
+        /// <param name="idConta"></param>
         public void LancarRendimentoDiarioCC(int idConta)
         {
             //Buscar dados a conta
@@ -35,11 +39,12 @@ namespace ContaCorrente.Dominio.Dominios
             _transacaoDominio.ValidarTipoTransacao(tipoTransacao);
 
             //Buscar proximo rendimento
-            var proximoRendimento = ProximoRendimento(idConta);
+            var proximoRendimento = BuscarProximoRendimento(idConta);
 
             //Relizar o calculo com os dados retornados. 
             var transacao = CalcularRendimento(conta.IdConta, conta.SaldoAtual, tipoTransacao.IdTipoTransacao, proximoRendimento);
 
+            //Insere a nova transacao na conta.
             conta = _transacaoDominio.AdicionarTransacao(conta, transacao, tipoTransacao);
             conta.RendimentoDiarioCc.Add(new RendimentoDiarioCc
             {
@@ -52,7 +57,12 @@ namespace ContaCorrente.Dominio.Dominios
             _transacaoRepositorio.InserirTransacao(conta);
         }
 
-        public TaxaCdi ProximoRendimento(int idConta)
+        /// <summary>
+        /// Busca as informacoes do proximo rendimento a ser processado na conta.
+        /// </summary>
+        /// <param name="idConta"></param>
+        /// <returns></returns>
+        public TaxaCdi BuscarProximoRendimento(int idConta)
         {
             //Buscar o ultimo rendimento processado
             var ultimoRendimento = _rendimentoDiarioCCRepositorio.BuscarUltimoRendimentoConta(idConta);
@@ -67,6 +77,14 @@ namespace ContaCorrente.Dominio.Dominios
             return _rendimentoDiarioCCRepositorio.BuscarTaxa(dataProximoRendimento);
         }
 
+        /// <summary>
+        /// Realiza o calculo de rendimento e retorna a transacao que devera ser incluida.
+        /// </summary>
+        /// <param name="idConta"></param>
+        /// <param name="saldoAtual"></param>
+        /// <param name="idTipoTransacao"></param>
+        /// <param name="proximoRendimento"></param>
+        /// <returns></returns>
         public TransacaoDTO CalcularRendimento(int idConta, decimal saldoAtual, int idTipoTransacao, TaxaCdi proximoRendimento)
         {
             var transacao = new TransacaoDTO()

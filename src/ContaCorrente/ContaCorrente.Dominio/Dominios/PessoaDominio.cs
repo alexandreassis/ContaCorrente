@@ -17,7 +17,7 @@ namespace ContaCorrente.Dominio.Dominios
         }
 
         /// <summary>
-        /// Buscar clientes paginado
+        /// Buscar as primeiras pessoas conforme parametro
         /// </summary>
         /// <param name="qtd"></param>
         /// <returns></returns>
@@ -34,7 +34,7 @@ namespace ContaCorrente.Dominio.Dominios
         }
 
         /// <summary>
-        /// Buscar cliente por idPessoa
+        /// Buscar pessoa por idPessoa
         /// </summary>
         /// <param name="idPessoa"></param>
         /// <returns></returns>
@@ -51,26 +51,6 @@ namespace ContaCorrente.Dominio.Dominios
                 CPF = pessoa.Cpf,
                 Nome = pessoa.Nome
             };
-        }
-
-        /// <summary>
-        /// Buscar cliente por CPF
-        /// </summary>
-        /// <param name="cpf"></param>
-        /// <returns></returns>
-        public PessoaDTO BuscarPorCPF(string cpf)
-        {
-            var pessoa = _pessoaRepositorio.BuscarPorCPF(cpf);
-
-            if (pessoa == null)
-                throw new ArgumentException(MensagemResposta.PessoaFisicaNaoEncontrada);
-
-            return new PessoaDTO()
-            {
-                CPF = pessoa.Cpf,
-                IdPessoa = pessoa.IdPessoa,
-                Nome = pessoa.Nome
-            }; ;
         }
 
         /// <summary>
@@ -94,7 +74,7 @@ namespace ContaCorrente.Dominio.Dominios
         }
 
         /// <summary>
-        /// Atualizar dados de uma Pessoa
+        /// Atualizar dados de uma pessoa
         /// </summary>
         /// <param name="pessoa"></param>
         public PessoaDTO Atualizar(PessoaDTO pessoaParam)

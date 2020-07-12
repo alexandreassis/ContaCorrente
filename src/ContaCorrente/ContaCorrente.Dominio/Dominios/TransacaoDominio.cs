@@ -21,6 +21,10 @@ namespace ContaCorrente.Dominio.Dominios
             _tipoTransacaoRepositorio = tipoTransacaoRepositorio;
         }
 
+        /// <summary>
+        /// Busca os TipoTransacao disponiveis para serem lancada na conta manualmente.
+        /// </summary>
+        /// <returns></returns>
         public IList<TipoTransacaoDTO> BuscarTiposTransacoesDisponiveis()
         {
             var transacoes = _tipoTransacaoRepositorio.BuscarTiposTransacoes();
@@ -37,9 +41,18 @@ namespace ContaCorrente.Dominio.Dominios
             }).ToList();
         }
 
+        /// <summary>
+        /// Buca o TipoTransacao pelo nome dela.
+        /// </summary>
+        /// <param name="nome"></param>
+        /// <returns></returns>
         public TipoTransacao BuscarTipoTransacoesPorNome(string nome) =>
              _tipoTransacaoRepositorio.BuscarTiposTransacoesPorNome(nome);
 
+        /// <summary>
+        /// Insere uma transacao nova na conta.
+        /// </summary>
+        /// <param name="transacaoParam"></param>
         public void Inserir(TransacaoDTO transacaoParam)
         {
             var tipoTransacao = _tipoTransacaoRepositorio.BuscarTiposTransacoesPorId(transacaoParam.IdTipoTransacao);
@@ -55,12 +68,22 @@ namespace ContaCorrente.Dominio.Dominios
             _transacaoRepositorio.InserirTransacao(conta);
         }
 
+        /// <summary>
+        /// Realiza a validacao basica do TipoTransacao a ser lancado
+        /// </summary>
+        /// <param name="tipoTransacao"></param>
         public void ValidarTipoTransacao(TipoTransacao tipoTransacao)
         {
             if(tipoTransacao == null)
                 throw new ArgumentException(MensagemResposta.TipoTransacaoInvalido);
         }
 
+        /// <summary>
+        /// Realiza a validacao basica do Saldo da conta para o lancamento da transacao
+        /// </summary>
+        /// <param name="conta"></param>
+        /// <param name="transacaoParam"></param>
+        /// <param name="tipoTransacao"></param>
         public void ValidarSaldo(Conta conta, TransacaoDTO transacaoParam, TipoTransacao tipoTransacao)
         {
             decimal valorSaldoAtual = transacaoParam.Valor * tipoTransacao.FlagSaldoAtual;
@@ -72,6 +95,13 @@ namespace ContaCorrente.Dominio.Dominios
                 throw new ArgumentException(MensagemResposta.ContaSemSaldoParaOperacao);
         }
 
+        /// <summary>
+        /// Realiza os procedimentos necessarios para inclusao de uma nova transacao na conta.
+        /// </summary>
+        /// <param name="conta"></param>
+        /// <param name="transacaoParam"></param>
+        /// <param name="tipoTransacao"></param>
+        /// <returns></returns>
         public Conta AdicionarTransacao(Conta conta, TransacaoDTO transacaoParam, TipoTransacao tipoTransacao)
         {
             decimal valorSaldoAtual = transacaoParam.Valor * tipoTransacao.FlagSaldoAtual;

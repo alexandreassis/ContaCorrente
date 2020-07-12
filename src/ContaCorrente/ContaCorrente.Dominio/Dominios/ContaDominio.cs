@@ -23,7 +23,7 @@ namespace ContaCorrente.Dominio.Dominios
         }
 
         /// <summary>
-        /// Buscar contas paginado
+        /// Buscar as primeiras contas conforme parametro
         /// </summary>
         /// <param name="qtd"></param>
         /// <returns></returns>
@@ -45,6 +45,11 @@ namespace ContaCorrente.Dominio.Dominios
             }).ToList();
         }
 
+        /// <summary>
+        /// Buscar conta pelo id
+        /// </summary>
+        /// <param name="idConta"></param>
+        /// <returns></returns>
         public Conta BuscarPorId(int idConta)
         {
             return _contaRepositorio.BuscarPorId(idConta);
@@ -64,6 +69,10 @@ namespace ContaCorrente.Dominio.Dominios
             return conta.ConvertToDTO(pessoa, transacoes); ;
         }
 
+        /// <summary>
+        /// Verificar se uma conta possui requisitos minimos para ser manupulado
+        /// </summary>
+        /// <param name="conta"></param>
         public void ValidarConta(Conta conta)
         {
             if (conta == null)
