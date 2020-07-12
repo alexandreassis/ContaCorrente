@@ -1,0 +1,71 @@
+<h1 id="tableLabel">Cadastro de Contas</h1>
+
+<p *ngIf="!contas"><em>Carregando...</em></p>
+
+<div *ngIf="contas">
+  <label>Conta: </label>
+  <select (change)="selecionarConta($event.target.value)" style="margin-left: 10px;">
+    <option value="0">Selecione</option>
+    <option *ngFor="let c of contas" value={{c.idConta}}>
+      {{c.idConta}} - {{c.pessoa.nome}}
+    </option>
+  </select>
+</div>
+
+<br />
+<div *ngIf="conta">
+  <h4>Informações da Conta</h4>
+  <hr />
+  <div *ngIf="contas">
+    <dl class="row">
+      <dt class="col-sm-2">Id da Conta</dt>
+      <dd class="col-sm-4">{{conta.idConta}}</dd>
+      <dt class="col-sm-2">Id da Pessoa</dt>
+      <dd class="col-sm-4">{{conta.idPessoa}}</dd>
+      <dt class="col-sm-2">Nome</dt>
+      <dd class="col-sm-4">{{conta.pessoa.nome}}</dd>
+      <dt class="col-sm-2">CPF</dt>
+      <dd class="col-sm-4">{{conta.pessoa.cpf}}</dd>
+      <dt class="col-sm-2">Saldo Atual</dt>
+      <dd class="col-sm-4">{{conta.saldoAtual | currency:'BRL' }}</dd>
+    </dl>
+  </div>
+</div>
+
+<div *ngIf="conta">
+  <h4>Transações</h4>
+
+  <div>
+    <label>Tipo Transação: </label>
+    <select [(ngModel)]='transacaoNova.idTipoTransacao' style="margin-left: 10px;"> <!--(change)="selecionarConta($event.target.value)"--> 
+      <option value="0">Selecione</option>
+      <option *ngFor="let tt of tiposTransacoes" value={{tt.idTipoTransacao}}>
+        {{tt.descricao}} ({{tt.idTipoTransacao}})
+      </option>
+    </select>
+    <label style="margin-left: 10px;">Valor: </label>
+    <input style="width: 150px; margin-left: 10px;" [(ngModel)]='transacaoNova.valor' /> 
+    <input type="submit" value="Inserir Transação" (click)="InserirNovaTransacao()" class="btn btn-primary" style="margin-left:15px;" />
+
+    <input type="submit" value="Inserir Rendimento Diário" (click)="LancarRendimentoDiarioCC()" class="btn btn-secondary" style="float:right" />
+  </div>
+
+  <table class="table" style="margin-top:10px; margin-bottom: 10px;">
+    <thead>
+      <tr>
+        <th>Id da Transacao</th>
+        <th>Descricao</th>
+        <th>Valor</th>
+        <th>Data e Hora</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of conta.transacoes">
+        <td>{{ t.idTransacao }}</td>
+        <td>{{ t.tipoTransacao.descricaoAbreviada }}{{ t.historico == null ? '' : (' - ' + t.historico)}} </td>
+        <td style.color = "{{t.tipoTransacao.flagSaldoAtual == -1 ? 'red' : ''}}">{{t.tipoTransacao.flagSaldoAtual == -1 ? '-' : ''}}{{ t.valor | currency:'BRL' }}</td> 
+        <td>{{ t.dataHora | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

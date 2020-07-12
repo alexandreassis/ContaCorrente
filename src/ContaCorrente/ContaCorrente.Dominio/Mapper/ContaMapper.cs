@@ -20,7 +20,7 @@ namespace ContaCorrente.Dominio.Mapper
                     CPF = pessoa.Cpf,
                     Nome = pessoa.Nome
                 },
-                Transacoes = transacoes.Select(x =>
+                Transacoes = transacoes.OrderByDescending(x=> x.IdTransacao).Select(x =>
                     new TransacaoDTO
                     {
                         IdTransacao = x.IdTransacao,

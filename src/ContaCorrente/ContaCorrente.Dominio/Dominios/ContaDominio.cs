@@ -36,6 +36,12 @@ namespace ContaCorrente.Dominio.Dominios
                 IdConta = item.IdConta,
                 IdPessoa = item.IdPessoa,
                 SaldoAtual = item.SaldoAtual,
+                Pessoa = new PessoaDTO
+                {
+                    IdPessoa = item.IdPessoaNavigation.IdPessoa,
+                    CPF = item.IdPessoaNavigation.Cpf,
+                    Nome = item.IdPessoaNavigation.Nome,
+                }
             }).ToList();
         }
 

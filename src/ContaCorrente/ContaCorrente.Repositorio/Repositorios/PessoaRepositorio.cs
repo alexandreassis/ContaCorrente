@@ -21,7 +21,7 @@ namespace ContaCorrente.Repositorio.Repositorios
         public Pessoa BuscarPorCPF(string cpf) =>
             _context.Pessoa.Where(x => x.Cpf == cpf).FirstOrDefault();
 
-        public void Inserir(string cpf, string nome)
+        public Pessoa Inserir(string cpf, string nome)
         {
             try
             {
@@ -36,6 +36,8 @@ namespace ContaCorrente.Repositorio.Repositorios
 
                 _context.Pessoa.Add(pessoa);
                 _context.SaveChanges();
+
+                return pessoa;
             }
             catch (Exception e)
             {
@@ -43,7 +45,7 @@ namespace ContaCorrente.Repositorio.Repositorios
             }
         }
 
-        public void Atualizar(int idPessoa, string nome)
+        public Pessoa Atualizar(int idPessoa, string nome)
         {
             try
             {
@@ -52,6 +54,8 @@ namespace ContaCorrente.Repositorio.Repositorios
 
                 _context.Update(pessoa);
                 _context.SaveChanges();
+
+                return pessoa;
             }
             catch (Exception e)
             {

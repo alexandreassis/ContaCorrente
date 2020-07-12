@@ -77,26 +77,39 @@ namespace ContaCorrente.Dominio.Dominios
         /// Inserir uma pessoa nova
         /// </summary>
         /// <param name="pessoa"></param>
-        public void Inserir(PessoaDTO pessoa)
+        public PessoaDTO Inserir(PessoaDTO pessoaParam)
         {
-            var p = _pessoaRepositorio.BuscarPorCPF(pessoa.CPF);
+            var p = _pessoaRepositorio.BuscarPorCPF(pessoaParam.CPF);
             if (p != null)
                 throw new ArgumentException(MensagemResposta.PessoaFisicaJaExiste);
 
-            _pessoaRepositorio.Inserir(pessoa.CPF, pessoa.Nome);
+            var pessoa = _pessoaRepositorio.Inserir(pessoaParam.CPF, pessoaParam.Nome);
+
+            return new PessoaDTO
+            {
+                IdPessoa = pessoa.IdPessoa,
+                CPF = pessoa.Cpf,
+                Nome = pessoa.Nome
+            };
         }
 
         /// <summary>
         /// Atualizar dados de uma Pessoa
         /// </summary>
         /// <param name="pessoa"></param>
-        public void Atualizar(PessoaDTO pessoa)
+        public PessoaDTO Atualizar(PessoaDTO pessoaParam)
         {
-            var p = _pessoaRepositorio.BuscarPorId(pessoa.IdPessoa);
+            var p = _pessoaRepositorio.BuscarPorId(pessoaParam.IdPessoa);
             if (p == null)
                 throw new ArgumentException(MensagemResposta.PessoaFisicaNaoEncontrada);
 
-            _pessoaRepositorio.Atualizar(pessoa.IdPessoa, pessoa.Nome);
+            var pessoa = _pessoaRepositorio.Atualizar(pessoaParam.IdPessoa, pessoaParam.Nome);
+            return new PessoaDTO
+            {
+                IdPessoa = pessoa.IdPessoa,
+                CPF = pessoa.Cpf,
+                Nome = pessoa.Nome
+            };
         }
 
     }

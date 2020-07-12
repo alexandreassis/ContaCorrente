@@ -1,0 +1,43 @@
+<h1 id="tableLabel">Cadastro de Pessoas</h1>
+
+<p *ngIf="!pessoas"><em>Loading...</em></p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="pessoas">
+  <thead>
+    <tr>
+      <th>IdPessoa</th>
+      <th>CPF</th>
+      <th>Nome</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let p of pessoas">
+      <td>{{ p.idPessoa }}</td>
+      <td>{{ p.cpf }}</td>
+      <td>{{ p.nome }}</td>
+      <td><input type="submit" value="Editar" (click)="EditarPessoa(p)" class="btn btn-primary" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+<br />
+<h3>Criar Pessoa</h3>
+<hr />
+<div class="row">
+  <div class="col-md-4">
+    <div class="form-group">
+      <label class="control-label">CPF</label>
+      <input class="form-control" [disabled]="!isEnabledCPF" [(ngModel)]='pessoa.cpf' />
+    </div>
+    <div class="form-group">
+      <label class="control-label">Nome</label>
+      <input class="form-control" [(ngModel)]='pessoa.nome' />
+    </div>
+    <div class="form-group">
+      <input type="submit" value="Salvar" (click)="SalvarPessoa(pessoa)" class="btn btn-primary" />
+      <input type="reset" value="Limpar" (click)="ResetPessoaTemp()" class="btn btn-link" style="margin-left: 10px;"/>
+    </div>
+  </div>
+</div>

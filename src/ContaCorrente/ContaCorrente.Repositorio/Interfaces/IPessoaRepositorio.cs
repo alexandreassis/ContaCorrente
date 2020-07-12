@@ -8,7 +8,7 @@ namespace ContaCorrente.Repositorio.Interfaces
         public IList<Pessoa> Buscar(int qtd);
         public Pessoa BuscarPorId(int idPessoa);
         public Pessoa BuscarPorCPF(string cpf);
-        public void Inserir(string cpf, string nome);
-        public void Atualizar(int idPessoa, string nome);
+        public Pessoa Inserir(string cpf, string nome);
+        public Pessoa Atualizar(int idPessoa, string nome);
     }
 }
