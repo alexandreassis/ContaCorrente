@@ -113,7 +113,7 @@ namespace ContaCorrente.Dominio.Dominios
                 IdConta = transacaoParam.IdConta,
                 DataHora = transacaoParam.DataHora,
                 IdTipoTransacao = transacaoParam.IdTipoTransacao,
-                Valor = transacaoParam.Valor,
+                Valor = Math.Round(transacaoParam.Valor, 2),
                 Historico = transacaoParam.Historico,
             });
 

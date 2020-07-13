@@ -97,7 +97,7 @@ namespace ContaCorrente.Dominio.Dominios
 
             decimal rendimento = saldoAtual * (proximoRendimento.Percentual * proximoRendimento.TaxaDia);
 
-            transacao.Valor = rendimento;
+            transacao.Valor = Math.Round(rendimento, 2);
 
             return transacao;
         }
